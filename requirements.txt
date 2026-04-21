@@ -4,3 +4,4 @@ scikit-learn
 joblib
 numpy
 gunicorn==25.1.0 
+requests
