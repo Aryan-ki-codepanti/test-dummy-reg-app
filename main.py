@@ -31,3 +31,30 @@ def get_users():
         return {"error": "Failed to fetch users"}
 
     return response.json()
+
+
+
+# --------- Get User By ID ---------
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    response = requests.get(f"{BASE_URL}/{user_id}")
+    
+    if response.status_code == 404:
+        raise HTTPException(status_code=404, detail="User not found")
+    if response.status_code != 200:
+        raise HTTPException(status_code=500, detail="Error fetching user")
+
+    return response.json()
+
+# --------- Update User ---------
+@app.put("/users/{user_id}")
+def update_user(user_id: int, user: UserUpdate):
+    response = requests.put(
+        f"{BASE_URL}/{user_id}",
+        json=user.dict(exclude_none=True)
+    )
+
+    if response.status_code not in [200, 201]:
+        raise HTTPException(status_code=500, detail="Failed to update user")
+
+    return response.json()
